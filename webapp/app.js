@@ -7,6 +7,7 @@
 var
     http = require('http'),
     express = require('express'),
+    routes = require('./lib/routes'),
     app = express(),
     server = http.createServer(app);
 // ---------- КОНЕЦ ПЕРЕМЕННЫХ В ОБЛАСТИ ВИДИМОСТИ МОДУЛЯ -----------
@@ -14,6 +15,7 @@ var
 app.configure(function () {
     app.use(express.bodyParser());
     app.use(express.methodOverride());
+    // app.use( express.basicAuth( 'user', 'spa' ) );
     app.use(express.static(__dirname + '/public'));
     app.use(app.router);
 });
@@ -27,9 +29,7 @@ app.configure('development', function () {
 app.configure('production', function () {
     app.use(express.errorHandler());
 });
-app.get('/', function (request, response) {
-    response.redirect('/spa.html');
-});
+routes.configRoutes(app, server);
 // ------------------- КОНЕЦ КОНФИГУРАЦИИ СЕРВЕРА -------------------
 // -------------------- НАЧАЛО ЗАПУСКА СЕРВЕРА ----------------------
 server.listen(3000);
